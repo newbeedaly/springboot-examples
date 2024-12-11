@@ -1,0 +1,17 @@
+ES数据架构的主要概念（与关系数据库Mysql对比）
+
+（1）关系型数据库中的数据库（DataBase），等价于ES中的索引（Index）
+
+（2）一个数据库下面有N张表（Table），等价于1个索引Index下面有N多类型（Type）
+
+（3）一个数据库表（Table）下的数据由多行（Row）多列（Column）组成，等价于1个Type由多个文档（Document）和多Field组成。
+
+（4）在一个关系型数据库里面，schema定义了表、每个表的字段，还有表和字段之间的关系。 与之对应的，在ES中：Mapping定义索引下的Type的字段处理规则，
+即索引如何建立、索引类型、是否保存原始索引JSON文档、是否压缩原始JSON文档、是否需要分词处理、如何进行分词处理等。
+
+（5）在数据库中的增insert、删delete、改update、查select操作等价于ES中的增PUT/POST、删Delete、改Update、查GET。
+
+
+参考：https://blog.csdn.net/weixin_45546418/article/details/105725644
+     https://blog.csdn.net/sinat_33151213/article/details/112305769
+     https://www.cnblogs.com/cjsblog/p/10120470.html

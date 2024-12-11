@@ -1,0 +1,19 @@
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${superServiceImplClassPackage};
+import ${superServiceClassPackage};
+import org.springframework.stereotype.Component;
+
+/**
+ * <p>
+ * $!{table.comment} DAO实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Component
+public class ${table.entityName}Dao extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${superServiceClass}<${entity}> {
+
+}

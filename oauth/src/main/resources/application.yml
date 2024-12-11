@@ -1,0 +1,12 @@
+server:
+  port: 8014
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://www.newbeedaly.com:3306/oauth?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  redis:
+    host: www.newbeedaly.com:6379
+    password: ''
+    database: 0

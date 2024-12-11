@@ -1,0 +1,34 @@
+server:
+  port: 8011
+spring:
+  datasource:
+    db1:
+      jdbcUrl: jdbc:mysql://localhost:3306/one?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      username: root
+      password: mysql123
+      driverClassName: com.mysql.cj.jdbc.Driver
+    db2:
+      jdbcUrl: jdbc:mysql://localhost:3306/two?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      username: root
+      password: mysql123
+      driverClassName: com.mysql.cj.jdbc.Driver
+      enabled: true
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # 最小空闲链接数
+      minimumIdle: 5
+      # 最大链接数
+      maximumPoolSize: 50
+      # 最大生命周期
+      maxLifetime: 180000
+      # 最长闲置时间
+      idleTimeout: 60000
+      # 等待连接池的最大毫秒数
+      connectionTimeout: 20000
+
+mybatis-plus:
+  mapper-locations: classpath:/cn/newbeedaly/multi/datasource/adaptor/*/dao/*Mapper.xml
+  type-aliases-package: cn.newbeedaly.multi.datasource.adaptor
+  #开启sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

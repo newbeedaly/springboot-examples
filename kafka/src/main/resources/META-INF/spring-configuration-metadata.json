@@ -1,0 +1,31 @@
+{
+  "hints": [{
+    "name": "spring.kafka.enabled",
+    "values": [
+      {
+        "value": "true",
+        "description": "启用kafka"
+      },
+      {
+        "value": "false",
+        "description": "禁用kafka"
+      }
+    ]
+  }],
+  "groups": [
+    {
+      "sourceType": "cn.newbeedaly.kafka.kafka.autoconfigure.KafkaAutoConfiguration",
+      "name": "kafka",
+      "type": "cn.newbeedaly.kafka.kafka.autoconfigure.KafkaAutoConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "cn.newbeedaly.kafka.kafka.autoconfigure.KafkaAutoConfiguration",
+      "defaultValue": false,
+      "name": "spring.kafka.enabled",
+      "description": "kafka开关",
+      "type": "java.lang.Boolean"
+    }
+  ]
+}

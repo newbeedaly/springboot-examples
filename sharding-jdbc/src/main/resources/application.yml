@@ -1,0 +1,101 @@
+server:
+  port: 8019
+spring:
+  # 更多配置请参考：https://shardingsphere.apache.org/document/5.2.0/cn/user-manual/shardingsphere-jdbc/yaml-config/
+  # tips 对于未配置的表，默认只操作第一个库
+  shardingsphere:
+    props:
+      sql-show: true
+    mode:
+      type: Standalone # 单机模式 Standalone 集群模式 Cluster
+      repository:
+        type: JDBC # 持久化仓库类型 单机模式 JDBC 集群模式 ZooKeeper
+        props: # 持久化仓库所需属性
+          # namespace: governance
+          # server-lists: localhost:2181
+          # retryIntervalMilliseconds: 500
+          # timeToLiveSeconds: 60
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://www.newbeedaly.com:3306/ds0
+        username: root
+        password: 123456
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://www.newbeedaly.com:3306/ds1
+        username: root
+        password: 123456
+    rules:
+      # 分片
+      sharding:
+        # 默认分库配置
+        default-database-strategy:
+          standard:
+            sharding-column: user_id
+            sharding-algorithm-name: database-precise-sharding
+        tables:
+          t_user:
+            actual-data-nodes: ds${0..1}.t_user_${0..1}
+            # 分库策略
+            #database-strategy:
+            #  standard:
+            #    sharding-column: user_id
+            #    algorithm-expression: database-precise-sharding
+            # 分表策略
+            table-strategy:
+              standard:
+                sharding-column: user_id
+                sharding-algorithm-name: table-precise-sharding
+          t_user_binding:
+            actual-data-nodes: ds${0..1}.t_user_binding_${0..1}
+            # 分表策略
+            table-strategy:
+              standard:
+                sharding-column: user_id
+                sharding-algorithm-name: table-precise-sharding
+          t_order:
+            actualDataNodes: ds${0..1}.t_order_${0..9}
+            tableStrategy:
+              standard:
+                shardingColumn: order_id
+                shardingAlgorithmName: t-order-inline
+          t_order_item:
+            actualDataNodes: ds${0..1}.t_order_item_${0..9}
+            tableStrategy:
+              standard:
+                shardingColumn: order_id
+                shardingAlgorithmName: t_order-item-inline
+        # 绑定表
+        bindingTables:
+          - t_user,t_user_binding
+          - t_order,t_order_item
+        # 广播表
+        broadcastTables:
+          - t_address
+        # 分库分表算法配置
+        sharding-algorithms:
+          database-precise-sharding:
+            type: CLASS_BASED
+            props:
+              strategy: standard
+              algorithmClassName: cn.newbeedaly.shardingsphere.jdbc.config.PreciseShardingDatabaseAlgorithm
+          table-precise-sharding:
+            type: CLASS_BASED
+            props:
+              strategy: standard
+              algorithmClassName: cn.newbeedaly.shardingsphere.jdbc.config.PreciseShardingTableAlgorithm
+          t-order-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_${order_id % 10}
+          t_order-item-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_order_item_${order_id % 10}
+logging:
+  level:
+    cn.newbeedaly: TRACE

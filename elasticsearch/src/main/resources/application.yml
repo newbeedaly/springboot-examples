@@ -1,0 +1,5 @@
+server:
+  port: 8005
+spring:
+  elasticsearch:
+    uris: 127.0.0.1:9200

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 该xml配置中,xml元素大小写不敏感 -->
+<!-- status="off",log4j2把自身事件记录到控制台的配置，off表示不记录，其余的记录有trace，debug，info，warn，error，fatal -->
+<!-- monitorInterval表示检测更改配置的时间,单位是秒,最小间隔为5秒,0或负数表示不检测 -->
+<configuration name="test-cfg" status="off" monitorInterval="0">
+
+    <!-- 常量引用 -->
+    <properties>
+        <!-- 当前磁盘的根目录 -->
+        <property name="LOG_HOME">/logs</property>
+        <property name="FORMAT">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level >>> %logger{36} - %msg%n</property>
+    </properties>
+
+    <!-- appender用于接收各种日志 -->
+    <appenders>
+
+        <!-- 常见的输出到console,常用于开发环境中,默认是system_err,还有一个system_out -->
+        <console name="console" target="system_out">
+            <!-- appender级别的日志过滤 -->
+            <thresholdFilter level="info" onMatch="accept" onMismatch="deny"/>
+            <patternLayout pattern="${FORMAT}" />
+        </console>
+
+        <!-- append="false" 常用于开发环境,把日志记录到文件中,默认追加 -->
+        <!--<file name="file" fileName="${LOG_HOME}/log.log" append="false">
+            <patternLayout pattern="${FORMAT}" />
+        </file>-->
+
+        <!-- 错误日志文件 -->
+        <file name="errorFile" fileName="${LOG_HOME}/errorLog.log" append="true">
+            <patternLayout pattern="${FORMAT}" />
+        </file>
+
+        <!-- 按小时生成日志文件 -->
+        <!-- filePath = "${LOG_HOME}/app-%d{yyyy-MM-dd-HH-mm}.log"-->
+        <!-- 按天生成日志文件 -->
+        <!-- filePattern="${LOG_HOME}/app-%d{yyyy-MM-dd}.log"-->
+        <!-- 按月生成日志文件 -->
+        <!-- filePattern="${LOG_HOME}/app-%d{yyyy-MM}.log"-->
+        <RollingRandomAccessFile name="appLogFile" fileName="${LOG_HOME}/app.log"
+                                 filePattern="${LOG_HOME}/app-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${FORMAT}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </appenders>
+
+    <!-- 接收appender -->
+    <loggers>
+        <logger name="org.apache.http" level="WARN" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="com.ibatis" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />
+        <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />
+        <logger name="java.sql.Connection" level="DEBUG"  additivity="true"/>
+        <logger name="java.sql.Statement" level="DEBUG" additivity="true" />
+        <logger name="java.sql.PreparedStatement" level="DEBUG"  additivity="true"/>
+        <logger name="java.sql.ResultSet" level="DEBUG"  additivity="true"/>
+
+        <!--对包进行更详细的配置-->
+        <!--additivity表示是否追加,防止重复,因为root已经接收过一次了 -->
+        <logger name="cn.newbeedaly.log4j" level="DEBUG" additivity="false">
+            <!-- 输出到控制台 -->
+            <appender-ref ref="console" />
+            <!-- 输出到file -->
+            <!--<appender-ref ref="file" />-->
+            <appender-ref ref="appLogFile" />
+        </logger>
+
+        <!-- 错误日志文件 -->
+        <logger name="cn.newbeedaly.log4j" level="ERROR" additivity="false">
+            <!-- 输出到errorFile -->
+            <appender-ref ref="errorFile" />
+        </logger>
+
+        <!-- root logger,一般用于放置所有的appender -->
+        <root level="DEBUG">
+            <appender-ref ref="console" />
+            <!--<appender-ref ref="file" />-->
+            <appender-ref ref="appLogFile" />
+        </root>
+    </loggers>
+
+</configuration>

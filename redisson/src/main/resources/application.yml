@@ -1,0 +1,9 @@
+server:
+  port: 8017
+spring:
+  redis:
+    database: 0
+    host: www.newbeedaly.com
+    port: 6379
+    #password: '123456'
+    connect-timeout: 1000

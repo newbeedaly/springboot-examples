@@ -1,0 +1,90 @@
+package ${package.Controller};
+
+import cn.newbeedaly.springbootmybatisplus.page.PageQueryCondition;
+import cn.newbeedaly.springbootmybatisplus.page.PageQueryResult;
+import cn.newbeedaly.springbootmybatisplus.page.PageQuerySupport;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import ${package.Entity}.${entity};
+import ${cfg.packageDao}.${entity}Dao;
+import java.util.*;
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#set($kebabName = $table.name.replace('_','-'))
+@RestController
+@RequestMapping("/${kebabName}")
+public class ${table.controllerName} {
+
+    #set($lowrEntity = $table.entityName.substring(0,1).toLowerCase() + $table.entityName.substring(1,$table.entityName.length()))
+
+    @Autowired
+    private ${table.entityName}Dao ${lowrEntity}Dao;
+
+    
+    /**
+    * 通过id查询
+    */
+    @GetMapping("/get/{id}")
+    public ${table.entityName} getById(@PathVariable(value = "id") Integer id){
+        return ${lowrEntity}Dao.getById(id);
+    }
+
+    /**
+    * 新增
+    */
+    @PostMapping("/save")
+    public boolean save(@RequestBody ${table.entityName} ${lowrEntity}){
+        return ${lowrEntity}Dao.save(${lowrEntity});
+    }
+
+    /**
+    * 通过id删除
+    */
+    @DeleteMapping("/delete/{id}")
+    public boolean delete(@PathVariable(value = "id") String id){
+        return ${lowrEntity}Dao.removeById(Integer.parseInt(id));
+    }
+
+    /**
+    * 修改
+    */
+    @PutMapping("/update")
+    public boolean updateById(@RequestBody ${table.entityName} ${lowrEntity}){
+        return ${lowrEntity}Dao.updateById(${lowrEntity});
+    }
+
+
+    /**
+    * 查询列表
+    */
+    @PostMapping("/list")
+    public List<${table.entityName}> list(@RequestBody ${table.entityName} ${lowrEntity}){
+        List<${table.entityName}> list = ${lowrEntity}Dao.lambdaQuery()
+        //todo
+        .list();
+        return list;
+    }
+
+    /**
+    * 分页查询
+    */
+    @PostMapping("/page")
+    public PageQueryResult<${table.entityName}> page(@RequestBody PageQueryCondition<${table.entityName}> condition){
+        QueryWrapper<${table.entityName}> queryWrapper = PageQuerySupport.processingSort(condition.getSortList());
+        LambdaQueryWrapper<${table.entityName}> warrper = queryWrapper.lambda();
+        // todo
+        Page<${table.entityName}> page = ${lowrEntity}Dao.page(new Page<>(condition.getPage(), condition.getSize()), warrper);
+        return PageQuerySupport.buildPageResult(page);
+    }
+
+}

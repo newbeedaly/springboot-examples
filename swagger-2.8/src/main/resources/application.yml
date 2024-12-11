@@ -1,0 +1,8 @@
+server:
+  port: 8021
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+swagger:
+  enable: true

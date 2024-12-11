@@ -1,0 +1,23 @@
+server:
+  port: 8012
+  servlet:
+    context-path: /
+spring:
+  # 全局时间格式化
+  jackson:
+    time-zone: Asia/Shanghai
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://www.newbeedaly.com:3306/mybatis?useUnicode=true&&characterEncoding=UTF-8&connectTimeout=10000
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+mybatis:
+  # 类型别名的包
+  # <select id="getById" resultType="com.example.entity.User"> --> <select id="getById" resultType="User">
+  typeAliasesPackage: cn.newbeedaly.mybatis.bean
+  # mapper位置
+  mapperLocations: classpath:mapper/*.xml
+
+
